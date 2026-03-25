@@ -1,16 +1,23 @@
+# Depth First Search (DFS)
+
 graph = {
     'A': ['B', 'C'],
     'B': ['D', 'E'],
     'C': ['F'],
     'D': [],
-    'E': ['F'],
+    'E': [],
     'F': []
 }
-def dfs(start,visited):
-    visited.append(start)
-    print(start, end=" ")
-    for neighbor in graph[start]:
-        if neighbor not in visited:
-            dfs(neighbor,visited)
-print("DFS:")
-dfs('A',[])
+
+visited = []
+
+def dfs(node):
+    if node not in visited:
+        print(node, end=" ")
+        visited.append(node)
+
+        for neighbour in graph[node]:
+            dfs(neighbour)
+
+
+dfs('A')

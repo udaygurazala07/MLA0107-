@@ -1,31 +1,46 @@
-graph={'A':['B','C'],'B':['A','C','D'],'C':['A','B','D'],'D':['B','C']}
-colors=['Red','Green','Blue']
+# Map Coloring using CSP
 
-def safe(node,color,assign):
-    for n in graph[node]:
-        if n in assign and assign[n]==color: return False
+states = ['A', 'B', 'C', 'D']
+
+colors = ['Red', 'Green', 'Blue']
+
+neighbors = {
+    'A': ['B', 'C'],
+    'B': ['A', 'C', 'D'],
+    'C': ['A', 'B', 'D'],
+    'D': ['B', 'C']
+}
+
+solution = {}
+
+def safe(state, color):
+    for n in neighbors[state]:
+        if n in solution and solution[n] == color:
+            return False
     return True
 
-def color_map(nodes,assign={}):
-    if len(assign)==len(nodes): return assign
-    node=nodes[len(assign)]
-    for c in colors:
-        if safe(node,c,assign):
-            assign[node]=c
-            res=color_map(nodes,assign)
-            if res: return res
-            assign.pop(node)
-    return None
 
-print("Solution:",color_map(list(graph.keys())))
+def solve(state_index):
 
+    if state_index == len(states):
+        return True
 
+    state = states[state_index]
 
+    for color in colors:
+        if safe(state, color):
+            solution[state] = color
 
+            if solve(state_index + 1):
+                return True
 
-OUTPUT :
+            del solution[state]
 
-Solution: {'A': 'Red', 'B': 'Green', 'C': 'Blue', 'D': 'Red'}
+    return False
 
 
+solve(0)
 
+print("Solution:")
+for s in solution:
+    print(s, "->", solution[s])
